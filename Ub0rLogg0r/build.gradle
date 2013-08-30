@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.5.+'
+    }
+}
+apply plugin: 'android-library'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "18.0.1"
+
+    defaultConfig {
+        minSdkVersion 4
+        targetSdkVersion 18
+    }
+}
+
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+version = "1.0.0"
+group = "de.ub0r.android.logg0r"
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        // beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: "file:///tmp/myRepo/")
+
+        pom.project {
+            name 'Ub0r logg0r library'
+            packaging 'jar'
+            description 'A android.util.Log wrapper for easy removal of Log.d and Log.v calls with proguard.'
+            url 'https://github.com/felixb/ub0rlogg0r'
+
+            scm {
+                url 'scm:git@github.com:felixb/ub0rlogg0r.git'
+                connection 'scm:git@github.com:felixb/ub0rlogg0r.git'
+                developerConnection 'scm:git@github.com:felixb/ub0rlogg0r.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'flx'
+                    name 'Felix Bechstein'
+                    email 'f@ub0r.de'
+                }
+            }
+        }
+    }
+}
