@@ -32,7 +32,16 @@ Either include it in your project as an android library project, or grab it via 
 
 Or add it in your build.gradle
 
-    compile 'de.ub0r.android.logg0r:logg0r:1.0.+'
+    repositories {
+        maven {
+            url 'https://github.com/felixb/ub0rlogg0r/raw/mvn-repo/'
+        }
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'de.ub0r.android.ub0rlogg0r:ub0rlogg0r:1.0.+'
+    }
 
 References
 ==========
