@@ -40,38 +40,63 @@ signing {
     sign configurations.archives
 }
 
-uploadArchives {
-    configuration = configurations.archives
-    repositories.mavenDeployer {
-        // beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+afterEvaluate { project ->
 
-        repository(url: "file:///tmp/myRepo/")
+    uploadArchives {
+        def user = null
+        def repo = null
+        'git remote -v'.execute(null, project.projectDir).getText().find('.*?git@github.com[:/](.*?)/(.*?)(.git)? .*?') {
+          match ->
+              user = match[1]
+              repo = match[2]
+        }
 
-        pom.project {
-            name 'Ub0r logg0r library'
-            packaging 'jar'
-            description 'A android.util.Log wrapper for easy removal of Log.d and Log.v calls with proguard.'
-            url 'https://github.com/felixb/ub0rlogg0r'
+        def githubUrl = 'https://api.github.com/repos/' + user + '/' + repo;
+        if (System.getenv().GITHUB_TOKEN) {
+            githubUrl += '?access_token=' + System.getenv().GITHUB_TOKEN
+        }
+        def repoInfo = new groovy.json.JsonSlurper().parseText(new URL(githubUrl).getText())
 
-            scm {
-                url 'scm:git@github.com:felixb/ub0rlogg0r.git'
-                connection 'scm:git@github.com:felixb/ub0rlogg0r.git'
-                developerConnection 'scm:git@github.com:felixb/ub0rlogg0r.git'
-            }
+        def android_manifest = new XmlParser(false, false).
+                parseText(new File(project.projectDir, 'src/main/AndroidManifest.xml').getText())
+        def versionName = android_manifest.'@android:versionName'
+        def package_name = android_manifest.'@package'
+        def artifact_id = repo.toLowerCase()
+        project.version = versionName
+        project.group = package_name
 
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
+        configuration = configurations.archives
+        repositories.mavenDeployer {
+            // beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "file:///tmp/ub0rlogg0r/")
+
+            pom.project {
+                name repo
+                packaging 'jar'
+                description repoInfo.description
+                url repoInfo.html_url
+
+                scm {
+                    url repoInfo.git_url
+                    connection repoInfo.git_url
+                    developerConnection repoInfo.ssh_url
                 }
-            }
 
-            developers {
-                developer {
-                    id 'flx'
-                    name 'Felix Bechstein'
-                    email 'f@ub0r.de'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id user
+                        name 'Felix Bechstein'
+                        email 'f@ub0r.de'
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 .gradle
 .idea
 *.iml
+.*.swp
 build
 local.properties
 gradle
