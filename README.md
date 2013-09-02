@@ -43,6 +43,20 @@ Or add it in your build.gradle
         compile 'de.ub0r.android.ub0rlogg0r:logg0r:1.0.+'
     }
 
+Migration
+=========
+
+To migrate to this library you need to:
+
+ 1. Change the imports from android.util.Log to de.ub0r.android.logg0r.Log
+ 2. Use the new method parameters instead of concating strings in your app
+
+A simple sed like this should do the work:
+
+    sed -e 's:android.util.Log:de.ub0r.android.logg0r.Log:g' -e '/Log.[dviwe](/s: *+:,:g' -i [your *.java files]
+
+In some cases, you need to change implicit toString() into explicit calls.
+
 References
 ==========
 
