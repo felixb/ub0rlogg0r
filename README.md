@@ -40,7 +40,7 @@ Or add it in your build.gradle
     }
 
     dependencies {
-        compile 'de.ub0r.android.ub0rlogg0r:ub0rlogg0r:1.0.+'
+        compile 'de.ub0r.android.ub0rlogg0r:logg0r:1.0.+'
     }
 
 References
