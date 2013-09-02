@@ -13,7 +13,7 @@ Just add the following lines to your proguard configuration:
     }
 
 
-    -assumenosideeffects class de.ub0r.android.logg0r {
+    -assumenosideeffects class de.ub0r.android.logg0r.Log {
         public static *** d(...);
         public static *** v(...);
     }
