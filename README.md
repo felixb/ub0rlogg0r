@@ -55,8 +55,6 @@ A simple sed like this should do the work:
 
     sed -e 's:android.util.Log:de.ub0r.android.logg0r.Log:g' -e '/Log.[dviwe](/s: *+:,:g' -i [your *.java files]
 
-In some cases, you need to change implicit toString() into explicit calls.
-
 References
 ==========
 
