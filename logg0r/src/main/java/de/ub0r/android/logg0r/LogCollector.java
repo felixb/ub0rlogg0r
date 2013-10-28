@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
@@ -82,7 +83,9 @@ public class LogCollector {
             message = sendlogInstallText;
         } else {
             intent.putExtra(Intent.EXTRA_SUBJECT, "SendLog: " + context.getPackageName());
-            intent.setType("0||" + recipient);
+            if (!TextUtils.isEmpty(recipient)) {
+                intent.setType("0||" + recipient);
+            }
             title = sendlogRunTitle;
             message = sendlogRunText;
         }
@@ -160,7 +163,9 @@ public class LogCollector {
         }
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "SendLog: " + pkgname);
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient, ""});
+        if (!TextUtils.isEmpty(recipient)) {
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient, ""});
+        }
         intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
