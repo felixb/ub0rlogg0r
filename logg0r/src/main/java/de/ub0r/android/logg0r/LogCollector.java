@@ -25,6 +25,8 @@ import java.util.Calendar;
  *
  * @author flx
  */
+@SuppressWarnings("UnusedDeclaration")
+@TargetApi(Build.VERSION_CODES.DONUT)
 public class LogCollector {
 
     private static final String TAG = "LogCollector";
