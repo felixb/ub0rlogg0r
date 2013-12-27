@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -71,7 +72,6 @@ public class LogCollector {
      * @param sendlogRunTitle     title to show in dialog asking to run sendlog
      * @param sendlogRunText      text to show in dialog asking to run sendlog
      */
-    @TargetApi(Build.VERSION_CODES.DONUT)
     private static void sendLogsWithSendlog(final Context context, final String recipient,
             final String sendlogInstallTitle, final String sendlogInstallText,
             final String sendlogRunTitle, final String sendlogRunText) {
@@ -118,7 +118,7 @@ public class LogCollector {
     private static boolean sendLogsPlain(final Context context, final String recipient,
             final boolean silent) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        String pkgname = context.getPackageName();
+        String pkgName = context.getPackageName();
 
         StringBuilder sb = new StringBuilder();
         sb.append("Manufacturer: ").append(Build.MANUFACTURER).append("\n");
@@ -129,10 +129,21 @@ public class LogCollector {
         sb.append("SDK: ").append(Build.VERSION.SDK_INT).append("\n");
         sb.append("\n");
         try {
+            //noinspection ConstantConditions
+            PackageInfo info = context.getPackageManager().getPackageInfo(pkgName, 0);
+            sb.append("App Version: ").append(info.versionName).append("\n");
+            sb.append("App Version Code: ").append(info.versionCode).append("\n");
+        } catch (NullPointerException e) {
+            Log.w(TAG, "PackageManager not found: ", pkgName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.w(TAG, "package not found: ", pkgName);
+        }
+        sb.append("\n");
+        try {
             Process p = Runtime.getRuntime().exec("logcat -d -v time");
 
             File d = Environment.getExternalStorageDirectory();
-            File f = new File(d, pkgname + "-" + new SimpleDateFormat("y-MM-d_HH-mm-ss")
+            File f = new File(d, pkgName + "-" + new SimpleDateFormat("y-MM-d_HH-mm-ss")
                     .format(Calendar.getInstance().getTime()) + "-device-logs.log");
 
             if (f.exists()) {
@@ -164,7 +175,7 @@ public class LogCollector {
             return false;
         }
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "SendLog: " + pkgname);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "SendLog: " + pkgName);
         if (!TextUtils.isEmpty(recipient)) {
             intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipient, ""});
         }
