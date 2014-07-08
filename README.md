@@ -34,13 +34,13 @@ Or add it in your build.gradle
 
     repositories {
         maven {
-            url 'https://github.com/felixb/ub0rlogg0r/raw/mvn-repo/'
+            url 'https://raw.githubusercontent.com/felixb/ub0rlogg0r/mvn-repo/'
         }
         mavenCentral()
     }
 
     dependencies {
-        compile 'de.ub0r.android.ub0rlogg0r:logg0r:1.0.+'
+        compile 'de.ub0r.android.ub0rlogg0r:logg0r:+'
     }
 
 Migration
@@ -63,7 +63,7 @@ References
 License
 =======
 
-    Copyright 2012 Felix Bechstein
+    Copyright 2013 - 2014 Felix Bechstein
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
