@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * Copyright (C) 2013 Felix Bechstein
+ * Copyright (C) 2013 - 2014 Felix Bechstein
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 package de.ub0r.android.logg0r;
 
 import android.os.Build;
+
+import java.util.IllegalFormatException;
 
 /**
  * Mirror android.util.Log for easy removal with proguard.
@@ -68,8 +70,8 @@ public class Log {
      *            activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int v(String tag, String msg) {
-        return android.util.Log.v(tag, msg);
+    public static int v(final String tag, final String msg) {
+        return log(VERBOSE, tag, msg, (Throwable) null);
     }
 
     /**
@@ -77,115 +79,11 @@ public class Log {
      *
      * @param tag  Used to identify the source of a log message.  It usually identifies the class or
      *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int v(String tag, String msg, String msg1) {
-        return android.util.Log.v(tag, msg + msg1);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int v(String tag, Object msg, Object msg1) {
-        return android.util.Log.v(tag, "" + msg + msg1);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int v(String tag, String msg, String msg1, String msg2) {
-        return android.util.Log.v(tag, msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param msg The message you would like logged.
-     * @param tr  An exception to log
-     */
-    public static int v(String tag, String msg, Throwable tr) {
-        return android.util.Log.v(tag, msg, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, String msg, String msg1, Throwable tr) {
-        return android.util.Log.v(tag, msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, Object msg, Object msg1, Throwable tr) {
-        return android.util.Log.v(tag, "" + msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, String msg, String msg1, String msg2, Throwable tr) {
-        return android.util.Log.v(tag, msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2, tr);
+    public static int v(final String tag, final String msg, final Object... args) {
+        return log(VERBOSE, tag, msg, args);
     }
 
     /**
@@ -195,8 +93,8 @@ public class Log {
      *            activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int d(String tag, String msg) {
-        return android.util.Log.d(tag, msg);
+    public static int d(final String tag, final String msg) {
+        return log(DEBUG, tag, msg, (Throwable) null);
     }
 
     /**
@@ -204,115 +102,11 @@ public class Log {
      *
      * @param tag  Used to identify the source of a log message.  It usually identifies the class or
      *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int d(String tag, String msg, String msg1) {
-        return android.util.Log.d(tag, msg + msg1);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int d(String tag, Object msg, Object msg1) {
-        return android.util.Log.d(tag, "" + msg + msg1);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int d(String tag, String msg, String msg1, String msg2) {
-        return android.util.Log.d(tag, msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param msg The message you would like logged.
-     * @param tr  An exception to log
-     */
-    public static int d(String tag, String msg, Throwable tr) {
-        return android.util.Log.d(tag, msg, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, String msg, String msg1, Throwable tr) {
-        return android.util.Log.d(tag, msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, Object msg, Object msg1, Throwable tr) {
-        return android.util.Log.d(tag, "" + msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, String msg, String msg1, String msg2, Throwable tr) {
-        return android.util.Log.d(tag, msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2, tr);
+    public static int d(final String tag, final String msg, final Object... args) {
+        return log(DEBUG, tag, msg, args);
     }
 
     /**
@@ -322,8 +116,8 @@ public class Log {
      *            activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int i(String tag, String msg) {
-        return android.util.Log.i(tag, msg);
+    public static int i(final String tag, final String msg) {
+        return log(INFO, tag, msg, (Throwable) null);
     }
 
     /**
@@ -331,115 +125,11 @@ public class Log {
      *
      * @param tag  Used to identify the source of a log message.  It usually identifies the class or
      *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int i(String tag, String msg, String msg1) {
-        return android.util.Log.i(tag, msg + msg1);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     */
-    public static int i(String tag, Object msg, Object msg1) {
-        return android.util.Log.i(tag, "" + msg + msg1);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     * @param msg2 The message you would like logged, part2.
-     */
-    public static int i(String tag, String msg, String msg1, String msg2) {
-        return android.util.Log.i(tag, msg + msg1 + msg2);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     * @param msg2 The message you would like logged, part2.
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param msg The message you would like logged.
-     * @param tr  An exception to log
-     */
-    public static int i(String tag, String msg, Throwable tr) {
-        return android.util.Log.i(tag, msg, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, String msg, String msg1, Throwable tr) {
-        return android.util.Log.i(tag, msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, Object msg, Object msg1, Throwable tr) {
-        return android.util.Log.i(tag, "" + msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, String msg, String msg1, String msg2, Throwable tr) {
-        return android.util.Log.i(tag, msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2, tr);
+    public static int i(final String tag, final String msg, final Object... args) {
+        return log(INFO, tag, msg, args);
     }
 
     /**
@@ -449,8 +139,8 @@ public class Log {
      *            activity where the log call occurs.
      * @param msg The message you would like logged.
      */
-    public static int w(String tag, String msg) {
-        return android.util.Log.w(tag, msg);
+    public static int w(final String tag, final String msg) {
+        return log(WARN, tag, msg, (Throwable) null);
     }
 
     /**
@@ -458,115 +148,61 @@ public class Log {
      *
      * @param tag  Used to identify the source of a log message.  It usually identifies the class or
      *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int w(String tag, String msg, String msg1) {
-        return android.util.Log.w(tag, msg + msg1);
+    public static int w(final String tag, final String msg, final Object... args) {
+        return log(WARN, tag, msg, args);
     }
 
     /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int w(String tag, Object msg, Object msg1) {
-        return android.util.Log.w(tag, "" + msg + msg1);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int w(String tag, String msg, String msg1, String msg2) {
-        return android.util.Log.w(tag, msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
+     * Send an {@link #ERROR} log message.
      *
      * @param tag Used to identify the source of a log message.  It usually identifies the class or
      *            activity where the log call occurs.
      * @param msg The message you would like logged.
-     * @param tr  An exception to log
      */
-    public static int w(String tag, String msg, Throwable tr) {
-        return android.util.Log.w(tag, msg, tr);
+    public static int e(final String tag, final String msg) {
+        return log(ERROR, tag, msg, (Throwable) null);
     }
 
     /**
-     * Send a {@link #WARN} log message and log the exception.
+     * Send an {@link #ERROR} log message.
      *
      * @param tag  Used to identify the source of a log message.  It usually identifies the class or
      *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int w(String tag, String msg, String msg1, Throwable tr) {
-        return android.util.Log.w(tag, msg + msg1, tr);
+    public static int e(final String tag, String msg, final Object... args) {
+        return log(ERROR, tag, msg, args);
     }
 
     /**
-     * Send a {@link #WARN} log message and log the exception.
+     * What a Terrible Failure: Report a condition that should never happen. The error will always
+     * be logged at level ASSERT with the call stack. Depending on system configuration, a report
+     * may be added to the {@link android.os.DropBoxManager} and/or the process may be terminated
+     * immediately with an error dialog.
      *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
+     * @param tag Used to identify the source of a log message.
+     * @param msg The message you would like logged.
      */
-    public static int w(String tag, Object msg, Object msg1, Throwable tr) {
-        return android.util.Log.w(tag, "" + msg + msg1, tr);
+    public static int wtf(final String tag, final String msg) {
+        return log(ASSERT, tag, msg, (Throwable) null);
     }
 
     /**
-     * Send a {@link #WARN} log message and log the exception.
+     * What a Terrible Failure: Report a condition that should never happen. The error will always
+     * be logged at level ASSERT with the call stack. Depending on system configuration, a report
+     * may be added to the {@link android.os.DropBoxManager} and/or the process may be terminated
+     * immediately with an error dialog.
      *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
+     * @param tag  Used to identify the source of a log message.
+     * @param msg  The message you would like logged.
+     * @param args Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int w(String tag, String msg, String msg1, String msg2, Throwable tr) {
-        return android.util.Log.w(tag, msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2, tr);
+    public static int wtf(final String tag, final String msg, final Object... args) {
+        return log(ASSERT, tag, msg, args);
     }
 
     /**
@@ -585,890 +221,136 @@ public class Log {
      * @return Whether or not that this is allowed to be logged.
      * @throws IllegalArgumentException is thrown if the tag.length() > 23.
      */
-    public static boolean isLoggable(String tag, int level) {
+    public static boolean isLoggable(final String tag, int level) {
         return android.util.Log.isLoggable(tag, level);
     }
 
     /**
-     * Send a {@link #WARN} log message and log the exception.
+     * Send a log message.
      *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param tr  An exception to log
+     * @param level Logging level
+     * @param tag   Used to identify the source of a log message.  It usually identifies the class
+     *              or activity where the log call occurs.
+     * @param msg   The message you would like logged.
+     * @param args  Arguments for msg's String formatting. Last object may be a throwable.
      */
-    public static int w(String tag, Throwable tr) {
-        return android.util.Log.w(tag, tr);
-    }
+    private static int log(final int level, final String tag, final String msg,
+            final Object[] args) {
+        if (args == null || args.length == 0) {
+            return log(level, tag, msg, (Throwable) null);
+        }
 
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param msg The message you would like logged.
-     */
-    public static int e(String tag, String msg) {
-        return android.util.Log.e(tag, msg);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int e(String tag, String msg, String msg1) {
-        return android.util.Log.e(tag, msg + msg1);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int e(String tag, Object msg, Object msg1) {
-        return android.util.Log.e(tag, "" + msg + msg1);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int e(String tag, String msg, String msg1, String msg2) {
-        return android.util.Log.e(tag, msg + msg1 + msg2);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag Used to identify the source of a log message.  It usually identifies the class or
-     *            activity where the log call occurs.
-     * @param msg The message you would like logged.
-     * @param tr  An exception to log
-     */
-    public static int e(String tag, String msg, Throwable tr) {
-        return android.util.Log.e(tag, msg, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, String msg, String msg1, Throwable tr) {
-        return android.util.Log.e(tag, msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, Object msg, Object msg1, Throwable tr) {
-        return android.util.Log.e(tag, "" + msg + msg1, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, String msg, String msg1, String msg2, Throwable tr) {
-        return android.util.Log.e(tag, msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2, tr);
-    }
-
-    /**
-     * What a Terrible Failure: Report a condition that should never happen. The error will always
-     * be logged at level ASSERT with the call stack. Depending on system configuration, a report
-     * may be added to the {@link android.os.DropBoxManager} and/or the process may be terminated
-     * immediately with an error dialog.
-     *
-     * @param tag Used to identify the source of a log message.
-     * @param msg The message you would like logged.
-     */
-    public static int wtf(String tag, String msg) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, msg, null);
+        // grep Throwable from args
+        int l = args.length;
+        Throwable tr;
+        Object[] fargs;
+        if (args[l - 1] instanceof Throwable) {
+            l -= 1;
+            tr = (Throwable) args[l];
+            fargs = new Object[l];
+            System.arraycopy(args, 0, fargs, 0, l);
         } else {
-            return android.util.Log.e(tag, msg);
+            tr = null;
+            fargs = args;
+        }
+
+        // it's only Throwable, no formatting involved
+        if (l == 0) {
+            return log(level, tag, msg, tr);
+        }
+
+        // formatted msg
+        return log(level, tag, msg, fargs, tr);
+    }
+
+    /**
+     * Send a formatted log message.
+     *
+     * @param level Logging level
+     * @param tag   Used to identify the source of a log message.  It usually identifies the class
+     *              or activity where the log call occurs.
+     * @param msg   The message you would like logged.
+     * @param args  Arguments for msg's String formatting.
+     * @param tr    A Throwable for printing stack traces.
+     */
+    private static int log(final int level, final String tag, final String msg,
+            final Object[] args, final Throwable tr) {
+        // try String.format first
+        if (msg.contains("%")) {
+            try {
+                return log(level, tag, String.format(msg, args), tr);
+            } catch (IllegalFormatException e) {
+                // failed
+            }
+        }
+
+        // just concatenate Objects.toString()
+        StringBuilder sb = new StringBuilder(msg);
+        for (Object a : args) {
+            sb.append(a);
+        }
+        return log(level, tag, sb.toString(), tr);
+    }
+
+    /**
+     * Send a plain log message.
+     *
+     * @param level Logging level
+     * @param tag   Used to identify the source of a log message.  It usually identifies the class
+     *              or activity where the log call occurs.
+     * @param msg   The message you would like logged.
+     * @param tr    A Throwable for printing stack traces.
+     */
+    private static int log(final int level, final String tag, final String msg,
+            final Throwable tr) {
+        switch (level) {
+            case VERBOSE:
+                if (tr == null) {
+                    return android.util.Log.v(tag, msg);
+                } else {
+                    return android.util.Log.v(tag, msg, tr);
+                }
+            case DEBUG:
+                if (tr == null) {
+                    return android.util.Log.d(tag, msg);
+                } else {
+                    return android.util.Log.d(tag, msg, tr);
+                }
+            case INFO:
+                if (tr == null) {
+                    return android.util.Log.i(tag, msg);
+                } else {
+                    return android.util.Log.i(tag, msg, tr);
+                }
+            case WARN:
+                if (tr == null) {
+                    return android.util.Log.w(tag, msg);
+                } else {
+                    return android.util.Log.w(tag, msg, tr);
+                }
+            case ERROR:
+                if (tr == null) {
+                    return android.util.Log.e(tag, msg);
+                } else {
+                    return android.util.Log.e(tag, msg, tr);
+                }
+            case ASSERT:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+                    if (tr == null) {
+                        return android.util.Log.wtf(tag, msg);
+                    } else {
+                        return android.util.Log.wtf(tag, msg, tr);
+                    }
+                } else {
+                    if (tr == null) {
+                        return android.util.Log.e(tag, msg);
+                    } else {
+                        return android.util.Log.e(tag, msg, tr);
+                    }
+                }
+            default:
+                throw new IllegalArgumentException("Invalid log level: " + level);
         }
     }
 
-    /**
-     * What a Terrible Failure: Report a condition that should never happen. The error will always
-     * be logged at level ASSERT with the call stack. Depending on system configuration, a report
-     * may be added to the {@link android.os.DropBoxManager} and/or the process may be terminated
-     * immediately with an error dialog.
-     *
-     * @param tag  Used to identify the source of a log message.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     */
-    public static int wtf(String tag, Object msg, Object msg1) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, "" + msg + msg1, null);
-        } else {
-            return android.util.Log.e(tag, "" + msg + msg1);
-        }
-    }
-
-    /**
-     * What a Terrible Failure: Report a condition that should never happen. The error will always
-     * be logged at level ASSERT with the call stack. Depending on system configuration, a report
-     * may be added to the {@link android.os.DropBoxManager} and/or the process may be terminated
-     * immediately with an error dialog.
-     *
-     * @param tag  Used to identify the source of a log message.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     */
-    public static int wtf(String tag, Object msg, Object msg1, Object msg2) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, "" + msg + msg1 + msg2, null);
-        } else {
-            return android.util.Log.e(tag, "" + msg + msg1 + msg2);
-        }
-    }
-
-    /**
-     * What a Terrible Failure: Report an exception that should never happen. Similar to {@link
-     * #wtf(String, String)}, with an exception to log.
-     *
-     * @param tag Used to identify the source of a log message.
-     * @param tr  An exception to log.
-     */
-    public static int wtf(String tag, Throwable tr) {
-        return wtf(tag, tr.getMessage(), tr);
-    }
-
-    /**
-     * What a Terrible Failure: Report an exception that should never happen. Similar to {@link
-     * #wtf(String, Throwable)}, with a message as well.
-     *
-     * @param tag Used to identify the source of a log message.
-     * @param msg The message you would like logged.
-     * @param tr  An exception to log.  May be null.
-     */
-    public static int wtf(String tag, Object msg, Throwable tr) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, "" + msg, tr);
-        } else {
-            return android.util.Log.e(tag, "" + msg, tr);
-        }
-    }
-
-    /**
-     * What a Terrible Failure: Report an exception that should never happen. Similar to {@link
-     * #wtf(String, Throwable)}, with a message as well.
-     *
-     * @param tag  Used to identify the source of a log message.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param tr   An exception to log.  May be null.
-     */
-    public static int wtf(String tag, Object msg, Object msg1, Throwable tr) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, "" + msg + msg1, tr);
-        } else {
-            return android.util.Log.e(tag, "" + msg + msg1, tr);
-        }
-    }
-
-    /**
-     * What a Terrible Failure: Report an exception that should never happen. Similar to {@link
-     * #wtf(String, Throwable)}, with a message as well.
-     *
-     * @param tag  Used to identify the source of a log message.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param tr   An exception to log.  May be null.
-     */
-    public static int wtf(String tag, Object msg, Object msg1, Object msg2, Throwable tr) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            return android.util.Log.wtf(tag, "" + msg + msg1 + msg2, tr);
-        } else {
-            return android.util.Log.e(tag, "" + msg + msg1 + msg2, tr);
-        }
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int v(String tag, String msg, String msg1, String msg2, String msg3) {
-        return android.util.Log.v(tag, msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2, Object msg3) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, String msg, String msg1, String msg2, String msg3,
-            Throwable tr) {
-        return android.util.Log.v(tag, msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Throwable tr) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int d(String tag, String msg, String msg1, String msg2, String msg3) {
-        return android.util.Log.d(tag, msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2, Object msg3) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, String msg, String msg1, String msg2, String msg3,
-            Throwable tr) {
-        return android.util.Log.d(tag, msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Throwable tr) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int i(String tag, String msg, String msg1, String msg2, String msg3) {
-        return android.util.Log.i(tag, msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     * @param msg2 The message you would like logged, part2.
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2, Object msg3) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, String msg, String msg1, String msg2, String msg3,
-            Throwable tr) {
-        return android.util.Log.i(tag, msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Throwable tr) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int w(String tag, String msg, String msg1, String msg2, String msg3) {
-        return android.util.Log.w(tag, msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2, Object msg3) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int w(String tag, String msg, String msg1, String msg2, String msg3,
-            Throwable tr) {
-        return android.util.Log.w(tag, msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Throwable tr) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int e(String tag, String msg, String msg1, String msg2, String msg3) {
-        return android.util.Log.e(tag, msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2, Object msg3) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2 + msg3);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, String msg, String msg1, String msg2, String msg3,
-            Throwable tr) {
-        return android.util.Log.e(tag, msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Throwable tr) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2 + msg3, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int v(String tag, String msg, String msg1, String msg2, String msg3,
-            String msg4) {
-        return android.util.Log.v(tag, msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Object msg4) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, String msg, String msg1, String msg2, String msg3, String msg4,
-            Throwable tr) {
-        return android.util.Log.v(tag, msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #VERBOSE} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int v(String tag, Object msg, Object msg1, Object msg2, Object msg3, Object msg4,
-            Throwable tr) {
-        return android.util.Log.v(tag, "" + msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int d(String tag, String msg, String msg1, String msg2, String msg3,
-            String msg4) {
-        return android.util.Log.d(tag, msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Object msg4) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, String msg, String msg1, String msg2, String msg3, String msg4,
-            Throwable tr) {
-        return android.util.Log.d(tag, msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #DEBUG} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int d(String tag, Object msg, Object msg1, Object msg2, Object msg3, Object msg4,
-            Throwable tr) {
-        return android.util.Log.d(tag, "" + msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     * @param msg2 The message you would like logged, part2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int i(String tag, String msg, String msg1, String msg2, String msg3,
-            String msg4) {
-        return android.util.Log.i(tag, msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send an {@link #INFO} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part0.
-     * @param msg1 The message you would like logged, part1.
-     * @param msg2 The message you would like logged, part2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Object msg4) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, String msg, String msg1, String msg2, String msg3, String msg4,
-            Throwable tr) {
-        return android.util.Log.i(tag, msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #INFO} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int i(String tag, Object msg, Object msg1, Object msg2, Object msg3, Object msg4,
-            Throwable tr) {
-        return android.util.Log.i(tag, "" + msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int w(String tag, String msg, String msg1, String msg2, String msg3,
-            String msg4) {
-        return android.util.Log.w(tag, msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #WARN} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Object msg4) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int w(String tag, String msg, String msg1, String msg2, String msg3, String msg4,
-            Throwable tr) {
-        return android.util.Log.w(tag, msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #WARN} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int w(String tag, Object msg, Object msg1, Object msg2, Object msg3, Object msg4,
-            Throwable tr) {
-        return android.util.Log.w(tag, "" + msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int e(String tag, String msg, String msg1, String msg2, String msg3,
-            String msg4) {
-        return android.util.Log.e(tag, msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send an {@link #ERROR} log message.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2, Object msg3,
-            Object msg4) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2 + msg3 + msg4);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, String msg, String msg1, String msg2, String msg3, String msg4,
-            Throwable tr) {
-        return android.util.Log.e(tag, msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
-
-    /**
-     * Send a {@link #ERROR} log message and log the exception.
-     *
-     * @param tag  Used to identify the source of a log message.  It usually identifies the class or
-     *             activity where the log call occurs.
-     * @param msg  The message you would like logged, part 0.
-     * @param msg1 The message you would like logged, part 1.
-     * @param msg2 The message you would like logged, part 2.
-     * @param msg3 The message you would like logged, part 3.
-     * @param msg4 The message you would like logged, part 4.
-     * @param tr   An exception to log
-     */
-    public static int e(String tag, Object msg, Object msg1, Object msg2, Object msg3, Object msg4,
-            Throwable tr) {
-        return android.util.Log.e(tag, "" + msg + msg1 + msg2 + msg3 + msg4, tr);
-    }
 }

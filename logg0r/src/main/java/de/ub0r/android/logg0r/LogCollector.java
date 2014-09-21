@@ -1,6 +1,5 @@
 package de.ub0r.android.logg0r;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -27,7 +26,6 @@ import java.util.Calendar;
  * @author flx
  */
 @SuppressWarnings("UnusedDeclaration")
-@TargetApi(Build.VERSION_CODES.DONUT)
 public class LogCollector {
 
     private static final String TAG = "LogCollector";

@@ -2,7 +2,7 @@ Ub0rLogg0r
 ==========
 
 ub0r logg0r is just a simple wrapper around the android.util.Log class.
-It allows you to write things like `Log.d(TAG, "foo=" + bar)` as `Log.d(TAG, "foo=", bar)`.
+It allows you to write things like `Log.d(TAG, "foo=" + foo + ", bar=" + bar)` as `Log.d(TAG, "foo=%s, bar=%s", foo, bar)` or `Log.d(TAG, "foo=", bar, ", bar=", foo)`.
 This simple change allows you to remove `Log.d()` and `Log.v()` with with proguard WITH the strings you are passing to it.
 
 Just add the following lines to your proguard configuration:
@@ -49,7 +49,7 @@ Migration
 To migrate to this library you need to:
 
  1. Change the imports from android.util.Log to de.ub0r.android.logg0r.Log
- 2. Use the new method parameters instead of concating strings in your app
+ 2. Use the new method parameters instead of concatenating strings in your app
 
 A simple sed like this should do the work:
 
