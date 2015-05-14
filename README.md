@@ -34,7 +34,7 @@ Or add it in your build.gradle
 
     repositories {
         maven {
-            url 'https://raw.githubusercontent.com/felixb/ub0rlogg0r/mvn-repo/'
+            url 'https://raw.githubusercontent.com/felixb/mvn-repo/master/'
         }
         mavenCentral()
     }
