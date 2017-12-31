@@ -40,7 +40,7 @@ Or add it in your build.gradle
     }
 
     dependencies {
-        compile 'de.ub0r.android.ub0rlogg0r:logg0r:+'
+        compile 'de.ub0r.android.logg0r:logg0r:+'
     }
 
 Migration
